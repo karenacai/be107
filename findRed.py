@@ -137,9 +137,9 @@ if(__name__=="__main__"):
 	    
 	    norm_red = float(average[2])/sum(average)
 	    print(norm_red)
-	    dist = 10
+	    dist = 3
             if(norm_red > 0.60):
-		if random.random() < 0.93:
+		if random.random() < 0.90:
                 	robotdirection=robotdirection*-1
 			dist = dist/2
 	    else:
