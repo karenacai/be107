@@ -5,7 +5,7 @@ from mpl_toolkits.mplot3d import Axes3D
 
 f = h5py.File("data.h5","r")
 
-dset = f['r_vecs']
+dset = f['t_vecs']
 
 x = []
 y = []
@@ -17,6 +17,6 @@ for a in dset:
     
 fig = plt.figure()
 ax = Axes3D(fig)
-ax.scatter(x,y,z)
+ax.plot(x,y,z)
 
 plt.show()

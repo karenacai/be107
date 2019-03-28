@@ -90,7 +90,7 @@ while(True):
         # Require 15 markers before drawing axis
         if ids is not None:
             # Estimate the posture of the gridboard, which is a construction of 3D space based on the 2D video 
-            rvecs, tvecs, _ = aruco.estimatePoseSingleMarkers(corners,1, cameraMatrix, distCoeffs)
+            rvecs, tvecs= aruco.estimatePoseSingleMarkers(corners,1, cameraMatrix, distCoeffs)
             #print(rvecs, tvecs)
             #print("hi")
             for rvec, tvec in zip(rvecs,tvecs):
