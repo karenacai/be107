@@ -65,10 +65,10 @@ while(True):
     if ret == True:
         # grayscale image
         #gray = cv2.cvtColor(QueryImg, cv2.COLOR_BGR2GRAY)
-    
+
         # Detect Aruco markers
         corners, ids, rejectedImgPoints = aruco.detectMarkers(gray, ARUCO_DICT, parameters=ARUCO_PARAMETERS)
-  
+
         # Refine detected markers
         # Eliminates markers not part of our board, adds missing markers to the board
         corners, ids, rejectedImgPoints, recoveredIds = aruco.refineDetectedMarkers(
@@ -78,7 +78,7 @@ while(True):
                 detectedIds = ids,
                 rejectedCorners = rejectedImgPoints,
                 cameraMatrix = cameraMatrix,
-                distCoeffs = distCoeffs)   
+                distCoeffs = distCoeffs)
 
         ###########################################################################
         # TODO: Add validation here to reject IDs/corners not part of a gridboard #
@@ -89,13 +89,15 @@ while(True):
 
         # Require 15 markers before drawing axis
         if ids is not None:
-            # Estimate the posture of the gridboard, which is a construction of 3D space based on the 2D video 
-            rvecs, tvecs= aruco.estimatePoseSingleMarkers(corners,1, cameraMatrix, distCoeffs)
+            # Estimate the posture of the gridboard, which is a construction of 3D space based on the 2D video
+            output= aruco.estimatePoseSingleMarkers(corners,1, cameraMatrix, distCoeffs)
+            rvecs = output[0]
+            tvecs = output[1]
             #print(rvecs, tvecs)
             #print("hi")
             for rvec, tvec in zip(rvecs,tvecs):
             #if pose:
-            
+
                 if r_data.size == 0:
                     r_data = rvec[0]
                 else:
@@ -116,7 +118,7 @@ while(True):
                 # Draw the camera posture calculated from the gridboard
                 gray = aruco.drawAxis(gray, cameraMatrix, distCoeffs, rvec, tvec, 0.3)
                 cv2.putText(gray, "Id: "+str(ids), (0,64), cv2.FONT_HERSHEY_SIMPLEX,1, (0,255,0),2,cv2.LINE_AA)
-            
+
                 # Display our image
         cv2.imshow('QueryImage', gray)
 
