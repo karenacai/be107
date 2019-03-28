@@ -22,39 +22,20 @@ class GoPiGoBot():
         go.enable_encoders()
         self.camera=camera
         self.stream=stream
-        starttime = time.time()
+        #starttime = time.time()
         #this will be our trail. absolute positions!!
         #leftmotor,rightmotor,time(sec)
-        self.resetRecord()
-        self.recordFreq = 0.5 #this is how often we record our position, in seconds!
-    def recordEncoders(self,dir="forward"):
-        """record current encoder positions to the timeline.
-        Acceptable dir values:
-        forward: add to the pulse number
-        backward: subtract from the pulse number"""
-        #time at which we take the sample
-        curtime = time.time()
-        #we can only move backward with both motors, so
-        #either we're adding both of them or subtracting.
-        #in the case that the robot rotates,
-        #that should mean that one encoder just stays at zero,
-        #and doesn't change the value. This will only work if we
-        #are always resetting the encoder values. I'm not sure if
-        #that's true if you don't use enc_tgt. Then this would
-        #all break down since the values will always be high
-        dirmod = 1
-        if(dir=="backward"):
-            dirmod = -1
-        leftmot = dirmod*go.enc_read(0)+self.keyframe[0]
-        rightmot = dirmod*go.enc_read(1)+self.keyframe[1]
-        self.timerecord+=[[leftmot,rightmot,curtime]]
-        return curtime
+        #self.resetRecord()
+        #self.recordFreq = 0.5 #this is how often we record our position, in seconds!
     def move(self,dist,how="F"):
         """this takes care of moving the robot.
-        how can be F: which is forward,
-        L: which is left,
-        R: which is right,
-        B: which is backward.
+        how can be
+        F: which is forward, dist is in cm
+        L: which is left (right motor on left motor off), dist is in degrees
+        R: which is right (left motor on right motor off), dist is in degrees
+        B: which is backward.  dist is in cm
+        TL: rotate in place, to the left (tank steering) dist is in pulses
+        TR: rotate in place, to the right (tank steering) dist is in pulses
         """
         if(dist<30 and (how=="F" or how=="B")):
             #If dist <30 the robot will
@@ -65,11 +46,11 @@ class GoPiGoBot():
             return -1
         else:
             #take an initial record
-            self.recordEncoders()
+            #self.recordEncoders()
             #save the current position because we're about to reset it
-            self.keyframe = self.timerecord[-1][:-1]
+            #self.keyframe = self.timerecord[-1][:-1]
             #basically we are recording our position while moving.
-            prevtime = int(time.time())
+            #prevtime = int(time.time())
             #go forward! this runs in the background pretty much
             if(how=="F"):
                 go.fwd(dist)
@@ -86,27 +67,18 @@ class GoPiGoBot():
                 go.enc_tgt(0,1,dist)
                 go.left_rot()
             #record while we haven't reached our destination
-            while(go.read_enc_status()):
+            #while(go.read_enc_status()):
                 #this resets both encoders so we start counting from zero!
                 #this next part should only trigger once per recordFreq
-                if(time.time()-prevtime>self.recordFreq):
-                    prevtime = time.time() #make sure to reset the timer...
+                #if(time.time()-prevtime>self.recordFreq):
+                    #prevtime = time.time() #make sure to reset the timer...
                     #tell the recordEncoders function which direction
                     #we are going
-                    dir = "forward"
-                    if(how=="B"):
-                        dir = "backward"
-                    self.recordEncoders(dir=dir)
+                    #dir = "forward"
+                    #if(how=="B"):
+                    #    dir = "backward"
+                    #self.recordEncoders(dir=dir)
             return 1
-    def resetRecord(self):
-        """resets the record to zero"""
-        #first we'll remember the current encoder numbers, without
-        #adding anything.
-        self.keyframe = [0,0]
-        self.timerecord = []
-        self.recordEncoders()
-        self.keyframe = self.timerecord[-1][:-1]
-        #now we'll say the last position was important
 
 #have to initialize the node which will send the data
 rospy.init_node('talker',anonymous=True)
@@ -179,3 +151,4 @@ if(__name__=="__main__"):
             #this next part clears the stream to prepare it for the next frame
             stream.seek(0)
             stream.truncate()
+            time.sleep(0.2)
