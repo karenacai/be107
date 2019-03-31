@@ -5,16 +5,10 @@ import pickle
 import numpy as np
 from PIL import Image
 import os
-import PyCapture2
 import time
 import h5py
+import cam_capture
 
-bus = PyCapture2.BusManager()
-numCams = bus.getNumOfCameras()
-camera = PyCapture2.Camera()
-uid = bus.getCameraFromIndex(0)
-camera.connect(uid)
-camera.startCapture()
 
 calibpath = 'calibration.pckl'
 
@@ -34,9 +28,10 @@ else:
 
 # Constant parameters used in Aruco methods
 ARUCO_PARAMETERS = aruco.DetectorParameters_create()
+#we are looking for 5x5 pixel markers! this refers to the pixels
+#inside the square which constitute the symbol
 ARUCO_DICT = aruco.Dictionary_get(aruco.DICT_5X5_50)
 
-# Create grid board object we're using in our stream
 board = aruco.GridBoard_create(
         markersX=5,
         markersY=7,
@@ -48,6 +43,8 @@ board = aruco.GridBoard_create(
 rvecs, tvecs = None, None
 
 #cam = cv2.VideoCapture(0)
+cam = cam_capture.FlyCamera(0)
+
 current_ms = lambda: int(round(time.time()*1000))
 
 t_data = np.array([])# initialize empty data array
@@ -56,15 +53,11 @@ timestamp = np.array([])
 
 
 while(True):
-    image = camera.retrieveBuffer()
-    row_bytes = float(len(image.getData())) / float(image.getRows());
-    gray = np.array(image.getData(), dtype="uint8").reshape((image.getRows(), image.getCols()) );
-    ret = True
     # Capturing each frame of our video stream
-    #ret, QueryImg = cam.read()
+    ret, QueryImg = cam.read()
     if ret == True:
         # grayscale image
-        #gray = cv2.cvtColor(QueryImg, cv2.COLOR_BGR2GRAY)
+        gray = cv2.cvtColor(QueryImg, cv2.COLOR_BGR2GRAY)
 
         # Detect Aruco markers
         corners, ids, rejectedImgPoints = aruco.detectMarkers(gray, ARUCO_DICT, parameters=ARUCO_PARAMETERS)
@@ -79,13 +72,8 @@ while(True):
                 rejectedCorners = rejectedImgPoints,
                 cameraMatrix = cameraMatrix,
                 distCoeffs = distCoeffs)
-
-        ###########################################################################
-        # TODO: Add validation here to reject IDs/corners not part of a gridboard #
-        ###########################################################################
-
         # Outline all of the markers detected in our image
-        gray = aruco.drawDetectedMarkers(gray, corners, )#borderColor=(0, 0, 255))
+        QueryImg = aruco.drawDetectedMarkers(QueryImg, corners, )#borderColor=(0, 0, 255))
 
         # Require 15 markers before drawing axis
         if ids is not None:
@@ -116,11 +104,11 @@ while(True):
                 #r_data = np.hstack((r_data, rvec[0]))
                 #t_data = np.hstack((t_data, tvec[0]))
                 # Draw the camera posture calculated from the gridboard
-                gray = aruco.drawAxis(gray, cameraMatrix, distCoeffs, rvec, tvec, 0.3)
+                QueryImg = aruco.drawAxis(QueryImg, cameraMatrix, distCoeffs, rvec, tvec, 0.3)
                 cv2.putText(gray, "Id: "+str(ids), (0,64), cv2.FONT_HERSHEY_SIMPLEX,1, (0,255,0),2,cv2.LINE_AA)
 
                 # Display our image
-        cv2.imshow('QueryImage', gray)
+        cv2.imshow('QueryImage', QueryImg)
 
     # Exit at the end of the video on the 'q' keypress
     if cv2.waitKey(1) & 0xFF == ord('q'):

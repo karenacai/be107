@@ -7,9 +7,10 @@ import numpy as np
 import os
 dowebcam=False
 try:
-    import launchPyCapture
+    import cam_capture
 except ModuleNotFoundError:
     dowebcam = True
+#dowebcam=True
 # termination criteria
 criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 # prepare object points, like (0,0,0), (1,0,0), (2,0,0) ....,(6,5,0)
@@ -21,7 +22,7 @@ imgpoints = [] # 2d points in image plane.
 if(dowebcam):
     cam = cv2.VideoCapture(0)
 else:
-    cam = launchPyCapture.FlyCamera(0) #intialize the pointgrey camera
+    cam = cam_capture.FlyCamera(0) #intialize the pointgrey camera
 calfolder = "calibration_images"
 imageprefix = "chessboard_"
 automation=True
