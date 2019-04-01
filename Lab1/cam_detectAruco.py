@@ -12,7 +12,7 @@ import cam_capture
 
 calibpath = 'calibration.pckl'
 
-hf = h5py.File('data.h5', 'w')
+hf = h5py.File('data_robotTracks.h5', 'w')
 
 # Check for camera calibration data
 if not os.path.exists('./{}'.format(calibpath)):
