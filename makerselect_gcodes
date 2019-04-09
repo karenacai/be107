@@ -1,0 +1,21 @@
+;start gcode
+G21 ;metric values
+G90 ;absolute positioning
+M82 ;set extruder to absolute mode
+M107 ;start with the fan off
+G28 X0 Y0 ;move X/Y to min endstops
+G28 Z0 ;move Z to min endstops
+G1 Z0.15
+G92 E0 ;zero the extruded length
+G1 E4 F1000
+G1 X70 E11 F600 ;extrude 6 mm of feed stock
+G92 E0 ;zero the extruded length again
+G1 F3000 
+;Put printing message on LCD screen
+M117 Printing...
+
+;end gcode
+M104 S0 ;extruder heater off endstops, so the head is out of the way
+M140 S0 ;bed off
+G1 Y160
+M84 ;steppers off
