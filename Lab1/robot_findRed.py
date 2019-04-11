@@ -12,7 +12,7 @@ import random
 
 #this is just a way to specify topics between robots
 botname = "be107bot1"
-
+threshold = .44
 class GoPiGoBot():
     """this class allows us to contain movement-specific variables in a nice way"""
     def __init__(self,recordFreq=0.5,camera=None,stream=None):
@@ -133,16 +133,16 @@ if(__name__=="__main__"):
             #myFlyBot.move
             average = getAverageColor(camera,stream)
 
-	    norm_red = float(average[2])/sum(average)
-	    print(norm_red)
-	    dist = 3
-            if(norm_red > 0.60):
-		if random.random() < 0.90:
-                	robotdirection=robotdirection*-1
-			dist = dist/2
-	    else:
-		if random.random() < 0.1:
-			robotdirection=robotdirection*-1
+            norm_red = float(average[2])/sum(average)
+            print(norm_red)
+            dist = 3
+            if(norm_red > threshold):
+                if random.random() < 0.90:
+                    robotdirection=robotdirection*-1
+                    dist = dist/2
+                else:
+                    if random.random() < 0.1:
+                        robotdirection=robotdirection*-1
             if(robotdirection >0):
                 myFlyBot.move(dist,"TL")
             else:
