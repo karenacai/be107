@@ -1,7 +1,8 @@
+
 try:
     import gopigo as go
     gopigoversion = 2
-except ModuleNotFoundError:
+except ImportError:
     import easygopigo3 as easy
     gopigoversion = 3
 if(gopigoversion==3):
