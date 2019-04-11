@@ -43,8 +43,8 @@ else:
     def turn_left(dist):
         go.turn_left(dist)
     def tank_left(degrees):
-        go.enc_tgt(0,1,dist)
+        go.enc_tgt(0,1,degrees)
         go.left_rot()
     def tank_right(degrees):
-        go.enc_tgt(0,1,dist)
+        go.enc_tgt(0,1,degrees)
         go.right_rot()
