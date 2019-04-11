@@ -42,6 +42,8 @@ else:
         go.bwd(dist)
     def turn_left(dist):
         go.turn_left(dist)
+    def turn_right(dist):
+        go.turn_right(dist)
     def tank_left(degrees):
         go.enc_tgt(0,1,degrees)
         go.left_rot()
