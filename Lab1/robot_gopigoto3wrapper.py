@@ -8,9 +8,9 @@ except ImportError:
 if(gopigoversion==3):
     gpg = easy.EasyGoPiGo3()
     def set_right_speed(speed=100):
-        gpg.set_speed(speed)
+        gpg.set_speed(speed*3)
     def set_left_speed(speed=100):
-        gpg.set_speed(speed)
+        gpg.set_speed(speed*3)
     def enable_encoders():
         pass
     def fwd(dist):
@@ -26,9 +26,9 @@ if(gopigoversion==3):
         gpg.set_motor_position(gpg.MOTOR_LEFT, (StartPositionLeft \
                                                 + dist))
     def tank_left(degrees):
-        gpg.turn_degrees(degrees)
+        gpg.turn_degrees(degrees*5)
     def tank_right(degrees):
-        gpg.turn_degrees(-degrees)
+        gpg.turn_degrees(-degrees*5)
 else:
     def set_right_speed(speed=100):
         go.set_right_speed(speed)
