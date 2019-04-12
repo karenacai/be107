@@ -7,12 +7,12 @@ import cv2
 import rospy
 from std_msgs.msg import Int32MultiArray
 import numpy as np
-import gopigo as go
+import robot_gopigoto3wrapper as go
 import random
 
 #this is just a way to specify topics between robots
 botname = "be107bot1"
-
+threshold = .44
 class GoPiGoBot():
     """this class allows us to contain movement-specific variables in a nice way"""
     def __init__(self,recordFreq=0.5,camera=None,stream=None):
@@ -61,11 +61,9 @@ class GoPiGoBot():
             elif(how=="B"):
                 go.bwd(dist)
             elif(how=="TR"):
-                go.enc_tgt(0,1,dist)
-                go.right_rot()
+                go.tank_right(dist)
             elif(how=="TL"):
-                go.enc_tgt(0,1,dist)
-                go.left_rot()
+                go.tank_left(dist)
             #record while we haven't reached our destination
             #while(go.read_enc_status()):
                 #this resets both encoders so we start counting from zero!
@@ -134,17 +132,17 @@ if(__name__=="__main__"):
             #average = myFlyBot.searchPattern()
             #myFlyBot.move
             average = getAverageColor(camera,stream)
-	    
-	    norm_red = float(average[2])/sum(average)
-	    print(norm_red)
-	    dist = 3
-            if(norm_red > 0.60):
-		if random.random() < 0.90:
-                	robotdirection=robotdirection*-1
-			dist = dist/2
-	    else:
-		if random.random() < 0.1:
-			robotdirection=robotdirection*-1
+
+            norm_red = float(average[2])/sum(average)
+            print(norm_red)
+            dist = 3
+            if(norm_red > threshold):
+                if random.random() < 0.90:
+                    robotdirection=robotdirection*-1
+                    dist = dist/2
+                else:
+                    if random.random() < 0.1:
+                        robotdirection=robotdirection*-1
             if(robotdirection >0):
                 myFlyBot.move(dist,"TL")
             else:
