@@ -8,7 +8,7 @@ from cv_bridge import CvBridge, CvBridgeError
 import time
 
 # set up publisher node to take camera input and output to ROS camera topic
-pub = rospy.Publisher('/camera/image_mono', Image, queue_size=100)
+pub = rospy.Publisher('/camera/image', Image, queue_size=100)
 rospy.init_node('image_publisher', anonymous=True)
 bridge = CvBridge()
 

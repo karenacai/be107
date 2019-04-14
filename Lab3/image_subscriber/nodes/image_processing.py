@@ -40,7 +40,7 @@ def callback(data):
 
 # initialize camera subscriber
 rospy.init_node('image_processing_node')
-img_sub = rospy.Subscriber('/camera/image_mono', Image, callback)
+img_sub = rospy.Subscriber('/camera/image', Image, callback)
 bridge = CvBridge()
 rospy.spin()
 f.close()
