@@ -9,7 +9,7 @@ import time
 import os
 
 # name of output file; overwrite the flyTracks data everytime you run the code (assumes the file given by the filename exists)
-filename = '/home/be107/catkin_ws/src/tracking/nodes/flyTracks.txt'
+filename = '/home/be107/catkin_ws/src/image_subscriber/nodes/flyTracks.txt'
 f = open(filename, 'r+')
 f.truncate(0)
 
