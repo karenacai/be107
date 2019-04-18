@@ -11,8 +11,10 @@ import socket
 hostname = socket.gethostname()
 # name of output file; overwrite the flyTracks data everytime you run the code (assumes the file given by the filename exists)
 filename = '/home/be107/catkin_ws/src/image_subscriber/nodes/flyTracks.txt'
-f = open(filename, 'r+')
-f.truncate(0)
+flyseek = False
+if(flyseek):
+    f = open(filename, 'r+')
+    f.truncate(0)
 
 # input is a color image, output should be a processed image where it is easy to extract the coordinates of the fly
 def imageProcessing(img):
@@ -45,7 +47,8 @@ def callback(data,flyseek=False):
 rospy.init_node('image_processing_node')
 robotname = "be107bot8"
 img_sub = rospy.Subscriber('/{}/image'.format(robotname), Image, \
-                                            (lambda a: callback(a,False)))
+                                            (lambda a: callback(a,flyseek)))
 bridge = CvBridge()
 rospy.spin()
-f.close()
+if(flyseek):
+    f.close()
