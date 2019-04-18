@@ -7,6 +7,7 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 import time
 import socket
+import io
 if sys.version_info[0] < 3:
     errorcode = ImportError
 else:
@@ -33,6 +34,7 @@ except errorcode:
     #trigger.
     try:
         import picamera
+        import picamera.array
         #we're going to define a new class in this try except block
         #to make the picamera behave the same as a default camera from
         #opencv's perspective
