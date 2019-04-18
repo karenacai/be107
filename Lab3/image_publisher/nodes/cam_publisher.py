@@ -56,8 +56,8 @@ except errorcode:
                 img = cv2.imdecode(data, 1)
                 #this next part removes the current image from the stream
                 #to prepare it for the next image.
-                stream.seek(0)
-                stream.truncate()
+                self.stream.seek(0)
+                self.stream.truncate()
                 return True, img
             def __del__(self):
                 #this part runs when this class is destroyed. This will ensure
