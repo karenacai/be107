@@ -7,6 +7,10 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 import time
 import socket
+if sys.version_info[0] < 3:
+    errorcode = ImportError
+else:
+    errorcode = ModuleNotFoundError
 #we're going to label our topic with our hostname
 #so we don't get confused between all the other robots
 #that will be publishing their images
@@ -24,7 +28,7 @@ try:
     #first let's see if we have a point grey firefly camera
     import cam_capture
     cam = cam_capture.FlyCamera(0)
-except ModuleNotFoundError:
+except errorcode:
     #if we don't have a point grey firefly camera then this will
     #trigger.
     try:
@@ -59,7 +63,7 @@ except ModuleNotFoundError:
                 self.cam.close()
         #after defining the class we initialize the class.
         cam = dummyCam(picamera.PiCamera())
-    except ModuleNotFoundError:
+    except errorcode:
         #finally if neither of those two things worked, then use
         #the webcam!
         cam = cv2.VideoCapture(0)
