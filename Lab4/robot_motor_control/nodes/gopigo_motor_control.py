@@ -27,7 +27,8 @@ class Robot:
         #the direction just tells us whether the number is negative or
         #positive
         print("motor {}".format(motnum))
-        print(speed)
+        print(int(speed))
+        speed = int(speed)
         direction=speed>0
         #the following prevents HOOLIGANS
         if(speed > 255):
