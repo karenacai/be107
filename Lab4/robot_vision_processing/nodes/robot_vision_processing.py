@@ -51,6 +51,7 @@ def callback(data):
     try:
         img = bridge.imgmsg_to_cv2(data).copy()
     except CvBridgeError as e:
+        print("error")
         print(e)
 
     proc_img = imageProcessing(img)
