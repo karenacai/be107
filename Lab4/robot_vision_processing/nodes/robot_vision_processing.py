@@ -10,6 +10,7 @@ import socket
 import atexit
 import curses
 import time
+import numpy as np
 
 hostname = socket.gethostname()
 
