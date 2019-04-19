@@ -45,9 +45,9 @@ class Robot:
                 go.motor2(absspeed,direction)
         else:
             if(motnum==1):
-                gpg.set_motor_dps(1,absspeed)
+                self.gpg.set_motor_dps(1,absspeed)
             elif(motnum==2):
-                gpg.set_motor_dps(2,absspeed)
+                self.gpg.set_motor_dps(2,absspeed)
         return True
     def motors(self,speed1,speed2):
         self.motor(speed1,1)
