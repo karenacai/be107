@@ -9,9 +9,9 @@ if sys.version_info[0] < 3:
     errorcode = ImportError
 else:
     errorcode = ModuleNotFoundError
-
-topic_motor1 = "/{}/motor1".format(hostname)
-topic_motor2 = "/{}/motor2".format(hostname)
+robotname="be107bot8"
+topic_motor1 = "/{}/motor1".format(robotname)
+topic_motor2 = "/{}/motor2".format(robotname)
 
 mot1 = rospy.Publisher(topic_motor1,Int32,queue_size=10)
 mot2 = rospy.Publisher(topic_motor2,Int32,queue_size=10)
