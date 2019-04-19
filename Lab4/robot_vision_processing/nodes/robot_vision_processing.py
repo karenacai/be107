@@ -33,10 +33,10 @@ def imageProcessing(img):
     # insert your image processing algorithm here
     return img
 def crop_right_half(image):
-    cropped_img = image[image.shape[1]/2:image.shape[1]]
+    cropped_img = image[0:image.shape[0],image.shape[1]/2:image.shape[1]]
     return cropped_img
 def crop_left_half(image):
-    cropped_img = image[0:image.shape[1]/2]
+    cropped_img = image[0:image.shape[0],0:image.shape[1]/2]
     return cropped_img
 # input is the processed image, output is the motor commands
 def visionToMotors(img):
@@ -57,7 +57,7 @@ def visionToMotors(img):
 # show image stream that is coming from a topic in OpenCv
 def callback(data):
     np_arr = np.fromstring(data.data, np.uint8)
-    img = cv2.imdecode(np_arr, cv2.CV_LOAD_IMAGE_COLOR)
+    img = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
 
     #try:
     #    img = bridge.imgmsg_to_cv2(data).copy()
@@ -65,12 +65,12 @@ def callback(data):
     #    print("error")
     #    print(e)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    #proc_img = imageProcessing(img)
-    #rightimg = crop_right_half(proc_img)
+    proc_img = imageProcessing(img)
+    rightimg = crop_right_half(proc_img)
     #m1,m2 = visionToMotors(proc_img)
     #mot1.publish(m1)
     #mot2.publish(m2)
-    cv2.imshow('image',img)
+    cv2.imshow('image',rightimg)
     cv2.waitKey(2)
     # write the position data to file
 
