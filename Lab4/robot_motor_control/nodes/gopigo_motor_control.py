@@ -2,6 +2,7 @@ import roslib, rospy
 from std_msgs.msg import Int32
 import sys
 import socket
+import atexit
 if sys.version_info[0] < 3:
     errorcode = ImportError
 else:
