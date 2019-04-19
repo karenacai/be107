@@ -12,76 +12,58 @@ else:
 robotname="be107bot8"
 topic_motor1 = "/{}/motor1".format(robotname)
 topic_motor2 = "/{}/motor2".format(robotname)
+topic_image = '/{}/image'.format(robotname)
 
 mot1 = rospy.Publisher(topic_motor1,Int32,queue_size=10)
 mot2 = rospy.Publisher(topic_motor2,Int32,queue_size=10)
 
 
-rospy.init_node('talker',anonymous=True)
-rate=rospy.Rate(10)
+# input is a color image, output should be a processed image where it is easy to extract the coordinates of the fly
+def imageProcessing(img):
+    # insert your image processing algorithm here
+    return img
+def crop_right_half(image):
+    cropped_img = image[image.shape[1]/2:image.shape[1]]
+    return cropped_img
+def crop_left_half(image):
+    cropped_img = image[0:image.shape[1]/2]
+    return cropped_img
+# input is the processed image, output is the motor commands
+def visionToMotors(img):
+    #data = np.fromstring(stream.getvalue(), dtype=np.uint8)
+    #img = cv2.imdecode(data, 1)
+    #this averages over the array in two dimensions, since we are averaging
+    #the entire image.
+    m1max = 300
+    m2max = 300
+    avg_right = crop_right_half(img).mean(axis=1).mean(axis=0)
+    avg_left = crop_left_half(img).mean(axis=1).mean(axis=0)
+    lfrac = float(avg_left)/(avg_left+avg_right)
+    m1 = Int32()
+    m2 = Int32()
+    m1.data = int(m1max*lfrac)
+    m2.data = int(m2max*(1/lfrac))
+    return m1,m2
+# show image stream that is coming from a topic in OpenCv
+def callback(data):
+    try:
+        img = bridge.imgmsg_to_cv2(data).copy()
+    except CvBridgeError as e:
+        print(e)
 
-def main(win):
-    win.nodelay(True)
-    key=""
-    motorspeed = [0,0]
-    motorincrement = 200
-    motordelta = [0,0]
-    win.clear()
-    win.addstr("WASD to move")
-    m1data = Int32()
-    m2data = Int32()
+    proc_img = imageProcessing(img)
+    rightimg = crop_right_half(proc_img)
+    m1,m2 = visionToMotors(proc_img)
+    mot1.publish(m1)
+    mot2.publish(m2)
+    cv2.imshow('image',rightimg)
+    cv2.waitKey(2)
+    # write the position data to file
 
-    m1data.data = 0
-    m2data.data = 0
-    for i in range(1000):
-        motordelta = [0,0]
-        try:
-            key = win.getkey()
-            secondkey = ''
-            try:
-                secondkey = win.getkey()
-            except Exception as e:
-                pass
-            win.clear()
-            if('w' in (key+secondkey)):
 
-                motordelta[0] += motorincrement
-                motordelta[1] += motorincrement
-            if('a' in (key+secondkey)):
-                motordelta[0] += motorincrement
-            if('d' in (key+secondkey)):
-                motordelta[1] += motorincrement
-            if('s' in (key+secondkey)):
-                motordelta[0] -= motorincrement
-                motordelta[1] -= motorincrement
-            if('x' in (key+secondkey)):
-                motordelta[0] = 0
-                motordelta[1] = 0
-            win.addstr(str(motordelta))
-            if('q' in (key+secondkey)):
-                break
-            #motor1dir = (motordelta[0]>=0)*2-1
-            #motor1speed = abs(motordelta[0])
-            #motor2dir = (motordelta[1]>=0)*2-1
-            #motor2speed = abs(motordelta[1])
-            m1data = Int32()
-            m2data = Int32()
 
-            m1data.data = motordelta[0]
-            #[motor1dir,motor1speed]
-            m2data.data = motordelta[1]
-            #[motor2dir,motor2speed]
-
-        except Exception as e:
-            mot1.publish(m1data)
-            mot2.publish(m2data)
-            pass
-            #win.addstr("exception")
-            #m1data = Int32()
-            #m2data = Int32()
-            #m1data.data = 0
-            #m2data.data = 0
-            #mot1.publish(m1data)
-            #mot2.publish(m2data)
-        rate.sleep()
-curses.wrapper(main)
+# initialize camera subscriber
+rospy.init_node('image_processing_node')
+img_sub = rospy.Subscriber(topic_image, Image, callback)
+bridge = CvBridge()
+rospy.spin()
