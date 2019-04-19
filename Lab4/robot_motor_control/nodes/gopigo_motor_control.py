@@ -27,7 +27,7 @@ class Robot:
         #the direction just tells us whether the number is negative or
         #positive
         print("motor {}".format(motnum))
-        print(int(speed))
+        #print(int(speed))
         direction=speed>0
         #the following prevents HOOLIGANS
         if(speed > 255):
@@ -40,6 +40,7 @@ class Robot:
         #now we are actually scaling the speed to what we said
         #the maximum speed was going to be.
         scaledspeed = int((speed/255)*self.maxmot1)
+        print("scaled speed is {}".format(scaledspeed))
         absspeed = abs(scaledspeed)
         if(self.gpg==None):
             if(motnum==1):
