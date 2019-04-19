@@ -28,8 +28,11 @@ def main(win):
     motordelta = [0,0]
     win.clear()
     win.addstr("WASD to move")
-    m1data = 0
-    m2data = 0
+    m1data = Int32()
+    m2data = Int32()
+
+    m1data.data = 0
+    m2data.data = 0
     for i in range(1000):
         motordelta = [0,0]
         try:
