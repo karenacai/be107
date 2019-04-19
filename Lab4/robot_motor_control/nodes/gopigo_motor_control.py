@@ -39,7 +39,7 @@ class Robot:
             speed = 0
         #now we are actually scaling the speed to what we said
         #the maximum speed was going to be.
-        scaledspeed = int((speed/255)*self.maxmot1)
+        scaledspeed = int((float(speed)/255)*self.maxmot1)
         print("scaled speed is {}".format(scaledspeed))
         absspeed = abs(scaledspeed)
         if(self.gpg==None):
