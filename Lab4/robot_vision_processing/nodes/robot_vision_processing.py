@@ -49,6 +49,9 @@ def main(win):
             if('s' in (key+secondkey)):
                 motordelta[0] -= motorincrement
                 motordelta[1] -= motorincrement
+            if('x' in (key+secondkey)):
+                motordelta[0] = 0
+                motordelta[1] = 0
             win.addstr(str(motordelta))
             if('q' in (key+secondkey)):
                 break
@@ -66,11 +69,11 @@ def main(win):
             mot2.publish(m2data)
         except Exception as e:
             win.addstr("exception")
-            m1data = Int32()
-            m2data = Int32()
-            m1data.data = 0
-            m2data.data = 0
-            mot1.publish(m1data)
-            mot2.publish(m2data)
+            #m1data = Int32()
+            #m2data = Int32()
+            #m1data.data = 0
+            #m2data.data = 0
+            #mot1.publish(m1data)
+            #mot2.publish(m2data)
         rate.sleep()
 curses.wrapper(main)
