@@ -72,8 +72,8 @@ except errorcode:
 while(True):
     ret1, origimg = cam.read()
     img = origimg.copy()
-
-    try:
-        pub.publish(bridge.cv2_to_imgmsg(img))
-    except CvBridgeError as e:
-        print(e)
+    if(int(time.time())%2==0):
+        try:
+            pub.publish(bridge.cv2_to_imgmsg(img))
+        except CvBridgeError as e:
+            print(e)
