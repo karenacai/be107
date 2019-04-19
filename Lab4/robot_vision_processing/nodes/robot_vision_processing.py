@@ -28,7 +28,7 @@ def main(win):
     motordelta = [0,0]
     win.clear()
     win.addstr("WASD to move")
-    while 1:
+    for i in range(1000):
         motordelta = [0,0]
         try:
             key = win.getkey()
@@ -50,7 +50,7 @@ def main(win):
                 motordelta[0] -= motorincrement
                 motordelta[1] -= motorincrement
             win.addstr(str(motordelta))
-            if(key==os.linesep):
+            if('q' in (key+secondkey)):
                 break
             #motor1dir = (motordelta[0]>=0)*2-1
             #motor1speed = abs(motordelta[0])
@@ -65,6 +65,7 @@ def main(win):
             mot1.publish(m1data)
             mot2.publish(m2data)
         except Exception as e:
+            print("exception")
             m1data = Int32()
             m2data = Int32()
             m1data.data = 0
