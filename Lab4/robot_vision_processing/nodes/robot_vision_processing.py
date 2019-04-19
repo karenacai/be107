@@ -58,7 +58,7 @@ def callback(data):
     m1,m2 = visionToMotors(proc_img)
     mot1.publish(m1)
     mot2.publish(m2)
-    cv2.imshow('image',rightimg)
+    cv2.imshow('image',proc_img)
     cv2.waitKey(2)
     # write the position data to file
 

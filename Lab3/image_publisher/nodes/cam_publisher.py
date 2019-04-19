@@ -76,4 +76,5 @@ while(True):
         try:
             pub.publish(bridge.cv2_to_imgmsg(img))
         except CvBridgeError as e:
+            print("error!")
             print(e)
