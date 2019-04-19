@@ -64,12 +64,12 @@ def callback(data):
     #    print("error")
     #    print(e)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    proc_img = imageProcessing(img)
-    rightimg = crop_right_half(proc_img)
-    m1,m2 = visionToMotors(proc_img)
-    mot1.publish(m1)
-    mot2.publish(m2)
-    cv2.imshow('image',proc_img)
+    #proc_img = imageProcessing(img)
+    #rightimg = crop_right_half(proc_img)
+    #m1,m2 = visionToMotors(proc_img)
+    #mot1.publish(m1)
+    #mot2.publish(m2)
+    cv2.imshow('image',img)
     cv2.waitKey(2)
     # write the position data to file
 
