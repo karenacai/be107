@@ -12,7 +12,7 @@ else:
 
 
 class Robot:
-    def __init__(self,maxmot1=150,maxmot2=150,deadzone = 10,gpg=None):
+    def __init__(self,maxmot1=350,maxmot2=350,deadzone = 10,gpg=None):
         self.maxmot1 = maxmot1
         self.maxmot2 = maxmot2
         self.deadzone = 10
@@ -39,7 +39,8 @@ class Robot:
             speed = 0
         #now we are actually scaling the speed to what we said
         #the maximum speed was going to be.
-        absspeed = int((abs(speed)/255)*self.maxmot1)
+        scaledspeed = int((speed/255)*self.maxmot1)
+        absspeed = abs(scaledspeed)
         if(self.gpg==None):
             if(motnum==1):
                 go.motor1(absspeed,direction)
@@ -47,9 +48,9 @@ class Robot:
                 go.motor2(absspeed,direction)
         else:
             if(motnum==1):
-                self.gpg.set_motor_dps(1,absspeed)
+                self.gpg.set_motor_dps(1,scaledspeed)
             elif(motnum==2):
-                self.gpg.set_motor_dps(2,absspeed)
+                self.gpg.set_motor_dps(2,scaledspeed)
         return True
     def motors(self,speed1,speed2):
         self.motor(speed1,1)
