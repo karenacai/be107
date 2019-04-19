@@ -37,7 +37,7 @@ class Robot:
             speed = 0
         #now we are actually scaling the speed to what we said
         #the maximum speed was going to be.
-        absspeed = (abs(speed)/255)*self.maxmot1
+        absspeed = int((abs(speed)/255)*self.maxmot1)
         if(self.gpg==None):
             if(motnum==1):
                 go.motor1(absspeed,direction)
