@@ -65,10 +65,12 @@ def main(win):
             #[motor1dir,motor1speed]
             m2data.data = motordelta
             #[motor2dir,motor2speed]
+
+        except Exception as e:
             mot1.publish(m1data)
             mot2.publish(m2data)
-        except Exception as e:
-            win.addstr("exception")
+            pass
+            #win.addstr("exception")
             #m1data = Int32()
             #m2data = Int32()
             #m1data.data = 0
