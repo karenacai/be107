@@ -65,7 +65,7 @@ def main(win):
             mot1.publish(m1data)
             mot2.publish(m2data)
         except Exception as e:
-            print("exception")
+            win.addstr("exception")
             m1data = Int32()
             m2data = Int32()
             m1data.data = 0
