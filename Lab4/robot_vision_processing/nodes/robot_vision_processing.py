@@ -4,6 +4,7 @@ import sys
 import socket
 import atexit
 import curses
+from sensor_msgs.msg import Image
 hostname = socket.gethostname()
 if sys.version_info[0] < 3:
     errorcode = ImportError
