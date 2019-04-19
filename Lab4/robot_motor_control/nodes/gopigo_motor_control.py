@@ -28,7 +28,6 @@ class Robot:
         #positive
         print("motor {}".format(motnum))
         print(int(speed))
-        speed = int(speed)
         direction=speed>0
         #the following prevents HOOLIGANS
         if(speed > 255):
@@ -77,8 +76,8 @@ def motor_callback(velocity,motnum):
 def stop_motors():
     mybot.motors(0,0)
 
-motor1_sub = rospy.Subscriber(topic_motor1, Int32, lambda a: motor_callback(a,1))
-motor2_sub = rospy.Subscriber(topic_motor2, Int32, lambda a: motor_callback(a,2))
+motor1_sub = rospy.Subscriber(topic_motor1, Int32, lambda a: motor_callback(a.data,1))
+motor2_sub = rospy.Subscriber(topic_motor2, Int32, lambda a: motor_callback(a.data,2))
 
 # Init and Run
 rospy.init_node('rospigo_motor_control', anonymous=True)
