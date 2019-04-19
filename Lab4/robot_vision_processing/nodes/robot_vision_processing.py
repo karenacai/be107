@@ -1,16 +1,23 @@
 import roslib, rospy
-from std_msgs.msg import Int32
+import cv2
 import sys
+from cv_bridge import CvBridge, CvBridgeError
+from std_msgs.msg import Int32
+from sensor_msgs.msg import Image
+from sensor_msgs.msg import CompressedImage
+import os
 import socket
 import atexit
 import curses
-from cv_bridge import CvBridge, CvBridgeError
-from sensor_msgs.msg import Image
+import time
+
 hostname = socket.gethostname()
+
 if sys.version_info[0] < 3:
     errorcode = ImportError
 else:
     errorcode = ModuleNotFoundError
+
 robotname="be107bot8"
 topic_motor1 = "/{}/motor1".format(robotname)
 topic_motor2 = "/{}/motor2".format(robotname)
@@ -48,12 +55,15 @@ def visionToMotors(img):
     return m1,m2
 # show image stream that is coming from a topic in OpenCv
 def callback(data):
-    try:
-        img = bridge.imgmsg_to_cv2(data).copy()
-    except CvBridgeError as e:
-        print("error")
-        print(e)
+    np_arr = np.fromstring(data.data, np.uint8)
+    img = cv2.imdecode(np_arr, cv2.CV_LOAD_IMAGE_COLOR)
 
+    #try:
+    #    img = bridge.imgmsg_to_cv2(data).copy()
+    #except CvBridgeError as e:
+    #    print("error")
+    #    print(e)
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     proc_img = imageProcessing(img)
     rightimg = crop_right_half(proc_img)
     m1,m2 = visionToMotors(proc_img)
@@ -67,6 +77,6 @@ def callback(data):
 
 # initialize camera subscriber
 rospy.init_node('image_processing_node')
-img_sub = rospy.Subscriber(topic_image, Image, callback)
+img_sub = rospy.Subscriber(topic_image, CompressedImage, callback,queue_size=1)
 bridge = CvBridge()
 rospy.spin()

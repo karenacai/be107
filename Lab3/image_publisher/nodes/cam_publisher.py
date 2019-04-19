@@ -4,6 +4,7 @@ import cv2
 import sys
 import numpy as np
 from sensor_msgs.msg import Image
+from sensor_msgs.msg import CompressedImage
 from cv_bridge import CvBridge, CvBridgeError
 import time
 import socket
@@ -17,7 +18,7 @@ else:
 #that will be publishing their images
 hostname = socket.gethostname()
 # set up publisher node to take camera input and output to ROS camera topic
-pub = rospy.Publisher('/{}/image'.format(hostname), Image, queue_size=100)
+pub = rospy.Publisher('/{}/image'.format(hostname), CompressedImage, queue_size=100)
 rospy.init_node('image_publisher', anonymous=True)
 bridge = CvBridge()
 
@@ -72,9 +73,17 @@ except errorcode:
 while(True):
     ret1, origimg = cam.read()
     img = origimg.copy()
-    if(int(time.time())%2==0):
+    #imout[0]ret1, origimg, _
+    #image_np = cv2.imdecode(np_arr, cv2.CV_LOAD_IMAGE_COLOR)
+    #
+    if(True):
+    #int(time.time())%2==0):
         try:
-            pub.publish(bridge.cv2_to_imgmsg(img))
+            msg = CompressedImage()
+            msg.header.stamp = rospy.Time.now()
+            msg.format = "jpeg"
+            msg.data = np.array(cv2.imencode('.jpg',img)[1]).tostring()
+            pub.publish(msg)
         except CvBridgeError as e:
             print("error!")
             print(e)

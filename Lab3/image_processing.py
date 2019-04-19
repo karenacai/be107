@@ -8,6 +8,8 @@ img = cv2.imread(os.path.join('antImages','antpic_01.png'),0) #this will import 
 
 # insert your image processing data here
 
+croppedFrame = img(cv2.Rect(0, img.rows/2, img.cols, img.rows/2));
+
 cv2.imshow('image',img) #when you are ready you create a window to show the image.
 #this needs to have a title (that's the first argument) and the image itself
 cv2.waitKey(0) #this part makes it so if any key is pressed, the window will close.
