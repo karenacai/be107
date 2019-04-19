@@ -63,9 +63,10 @@ def main(win):
             #motor2speed = abs(motordelta[1])
             m1data = Int32()
             m2data = Int32()
-            m1data.data = motordelta
+
+            m1data.data = motordelta[0]
             #[motor1dir,motor1speed]
-            m2data.data = motordelta
+            m2data.data = motordelta[1]
             #[motor2dir,motor2speed]
 
         except Exception as e:
