@@ -24,7 +24,7 @@ def main(win):
     win.nodelay(True)
     key=""
     motorspeed = [0,0]
-    motorincrement = 20
+    motorincrement = 200
     motordelta = [0,0]
     win.clear()
     win.addstr("WASD to move")
