@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import roslib, rospy
 from std_msgs.msg import Int32
 import sys
