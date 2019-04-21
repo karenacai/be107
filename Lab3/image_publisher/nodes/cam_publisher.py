@@ -42,6 +42,7 @@ except errorcode:
         class dummyCam:
             def __init__(self,camera,res=(640,480),framerate=32):
                 self.cam = camera
+                #picamera needs to have the resolution and framerate set
                 camera.resolution = res
                 camera.framerate = framerate
                 #we need a stream to get the image data. Not sure why but
@@ -71,19 +72,27 @@ except errorcode:
         #the webcam!
         cam = cv2.VideoCapture(0)
 while(True):
+    #first we read an image from the camera
     ret1, origimg = cam.read()
+    #we copy the image to prevent mangling the original
     img = origimg.copy()
-    #imout[0]ret1, origimg, _
-    #image_np = cv2.imdecode(np_arr, cv2.CV_LOAD_IMAGE_COLOR)
-    #
     if(True):
-    #int(time.time())%2==0):
+        #don't mind me.. just some mess
         try:
+            #we're going to send a CompressedImage message
             msg = CompressedImage()
+            #add time stamp
             msg.header.stamp = rospy.Time.now()
+            #what format to compress into
             msg.format = "jpeg"
+            #now we actually compress the image. Well that's what 'imencode' does.
+            #ros messages are actually strings so then we convert the compressed
+            #image into a string!!! it's quite huge that way. This might end up 
+            #badly when all the robots are sending these things around. We'll see...
             msg.data = np.array(cv2.imencode('.jpg',img)[1]).tostring()
+            #once prepared, then publish!
             pub.publish(msg)
         except CvBridgeError as e:
+            #actually this should never happen since we aren't using cvbridge any more
             print("error!")
             print(e)
