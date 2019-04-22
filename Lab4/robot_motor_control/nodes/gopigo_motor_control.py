@@ -38,8 +38,9 @@ class Robot:
         #with gopigo2 or 3.
         #setting the motor maximum speeds:
         if(self.gpg==None):
-            go.set_right_speed(maxmot1)
-            go.set_left_speed(maxmot2)
+            pass
+            #go.set_right_speed(maxmot1)
+            #go.set_left_speed(maxmot2)
         else:
             self.gpg.set_speed(maxmot1)
     def motor(self,speed,motnum):
@@ -70,9 +71,9 @@ class Robot:
             #for gopigo2 we need to tell it a direction and
             #an absolute speed.
             if(motnum==1):
-                go.motor1(absspeed,direction)
+                go.motor1(direction,absspeed)
             elif(motnum==2):
-                go.motor2(absspeed,direction)
+                go.motor2(direction,absspeed)
         else:
             #gopigo3 accepts positive and negative values
             if(motnum==1):
