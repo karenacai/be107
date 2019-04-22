@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import roslib, rospy
 from std_msgs.msg import Int32
 import sys
@@ -17,9 +18,9 @@ class Robot:
         """this class is intended to provide compatibility between gopigo2 and
         gopigo3 robots. Only max speed setting and individual motor control
         is implemented. For driving set distances and turning set angles, you'll
-        have to use the functions specific to gopigo2 or gopigo3. 
+        have to use the functions specific to gopigo2 or gopigo3.
         See here for gopigo2: https://github.com/DexterInd/GoPiGo
-        or here for gopigo3:https://github.com/DexterInd/GoPiGo3 
+        or here for gopigo3:https://github.com/DexterInd/GoPiGo3
         """
         #we'll define a maximum value. GoPiGo3 only uses one maximum speed for
         #both motors, and that will be maxmot1.
@@ -43,7 +44,7 @@ class Robot:
             self.gpg.set_speed(maxmot1)
     def motor(self,speed,motnum):
         """this takes care of setting the motor speed. Speed is a value from -255 to 255
-        which gets scaled to whatever the maxmot values are. 255 or -255 is max in either 
+        which gets scaled to whatever the maxmot values are. 255 or -255 is max in either
         direction and 0 (plus or minus the deadzone) is minimum"""
         #the direction just tells us whether the number is negative or
         #positive
@@ -86,7 +87,7 @@ class Robot:
         self.motor(speed2,2)
 #here we are seeing which package is present. If one fails then try the other!
 #of course the errorcode is different between python versions too and we account
-#for that as well. 
+#for that as well.
 try:
     import gopigo as go
     mybot = Robot()
