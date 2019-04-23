@@ -4,6 +4,7 @@ from std_msgs.msg import Int32
 import sys
 import socket
 import atexit
+import time
 #see description in "robot vision processing"
 if sys.version_info[0] < 3:
     errorcode = ImportError
