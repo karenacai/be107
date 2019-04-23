@@ -45,7 +45,7 @@ class Robot:
             #go.set_left_speed(maxmot2)
         else:
             self.gpg.set_speed(maxmot1)
-    def motor(self,speed,motnum):
+    def motor(self,speed,motnum,delay=50):
         """this takes care of setting the motor speed. Speed is a value from -255 to 255
         which gets scaled to whatever the maxmot values are. 255 or -255 is max in either
         direction and 0 (plus or minus the deadzone) is minimum"""
@@ -73,10 +73,11 @@ class Robot:
         if(self.gpg==None):
             #for gopigo2 we need to tell it a direction and
             #an absolute speed.
-            if(motnum==1):
-                go.motor1(direction,absspeed)
-            elif(motnum==2):
-                go.motor2(direction,absspeed)
+            if(int(time.time()*1000)%delay==0):
+                if(motnum==1):
+                    go.motor1(direction,absspeed)
+                elif(motnum==2):
+                    go.motor2(direction,absspeed)
         else:
             #gopigo3 accepts positive and negative values
             if(motnum==1):
@@ -84,11 +85,11 @@ class Robot:
             elif(motnum==2):
                 self.gpg.set_motor_dps(2,scaledspeed)
         return True
-    def motors(self,speed1,speed2):
+    def motors(self,speed1,speed2,delay=50):
         """wrapper function that allows setting both motors at once.
         It just runs the self.motor() function once for each motor"""
-        self.motor(speed1,1)
-        self.motor(speed2,2)
+        self.motor(speed1,1,delay)
+        self.motor(speed2,2,delay)
 #here we are seeing which package is present. If one fails then try the other!
 #of course the errorcode is different between python versions too and we account
 #for that as well.
@@ -114,7 +115,7 @@ def motor_callback(velocity,motnum):
     mybot.motor(velocity,motnum)
 def stop_motors():
     """this function turns off both motors in case of robot escape"""
-    mybot.motors(0,0)
+    mybot.motors(0,0,1)
 #to define a subscriber we have to give it a _function_ object that takes one
 #input. Since our motor callback takes two inputs (you have to tell it which
 #motor you want to control), we will define a lambda function that takes
