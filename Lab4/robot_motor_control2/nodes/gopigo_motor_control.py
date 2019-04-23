@@ -74,11 +74,11 @@ class Robot:
         if(self.gpg==None):
             #for gopigo2 we need to tell it a direction and
             #an absolute speed.
-            if(int(time.time()*1000)%delay==0):
-                if(motnum==1):
-                    go.motor1(direction,absspeed)
-                elif(motnum==2):
-                    go.motor2(direction,absspeed)
+            #if(int(time.time()*1000)%delay==0):
+            if(motnum==1):
+                go.motor1(direction,absspeed)
+            elif(motnum==2):
+                go.motor2(direction,absspeed)
         else:
             #gopigo3 accepts positive and negative values
             if(motnum==1):
