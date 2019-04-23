@@ -86,7 +86,7 @@ class Robot:
             elif(motnum==2):
                 self.gpg.set_motor_dps(2,scaledspeed)
         return True
-    def motors(self,speed1,speed2,delay=50):
+    def motors(self,speed1,speed2,delay=1):
         """wrapper function that allows setting both motors at once.
         It just runs the self.motor() function once for each motor"""
         self.motor(speed1,1,delay)
