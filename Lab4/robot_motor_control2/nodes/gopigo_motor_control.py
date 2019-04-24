@@ -4,6 +4,7 @@ from std_msgs.msg import Int32
 import sys
 import socket
 import atexit
+import time
 #see description in "robot vision processing"
 if sys.version_info[0] < 3:
     errorcode = ImportError
@@ -34,16 +35,18 @@ class Robot:
         #for gopigo3 you need to define a gopigo object and run all the functions from
         #within that.
         self.gpg = gpg
+        self.speedscaling = 1.0
         #the presence of this object is what will tell us whether we are dealing
         #with gopigo2 or 3.
         #setting the motor maximum speeds:
         if(self.gpg==None):
-            pass
+            #the old robots move twice as fast!! scale it down
+            self.speedscaling = 0.5
             #go.set_right_speed(maxmot1)
             #go.set_left_speed(maxmot2)
         else:
             self.gpg.set_speed(maxmot1)
-    def motor(self,speed,motnum):
+    def motor(self,speed,motnum,delay=50):
         """this takes care of setting the motor speed. Speed is a value from -255 to 255
         which gets scaled to whatever the maxmot values are. 255 or -255 is max in either
         direction and 0 (plus or minus the deadzone) is minimum"""
@@ -62,14 +65,16 @@ class Robot:
             speed = 0
         #now we are actually scaling the speed to what we said
         #the maximum speed was going to be.
-        scaledspeed = int((float(speed)/255)*self.maxmot1)
+        scaledspeed = int((float(speed)/255)*self.maxmot1*self.speedscaling)
         print("scaled speed is {}".format(scaledspeed))
+        #here we take the absolute value
         absspeed = abs(scaledspeed)
         #here we are setting the motor speeds differently depending
         #on which type of robot we are dealing with.
         if(self.gpg==None):
             #for gopigo2 we need to tell it a direction and
             #an absolute speed.
+            #if(int(time.time()*1000)%delay==0):
             if(motnum==1):
                 go.motor1(direction,absspeed)
             elif(motnum==2):
@@ -81,11 +86,11 @@ class Robot:
             elif(motnum==2):
                 self.gpg.set_motor_dps(2,scaledspeed)
         return True
-    def motors(self,speed1,speed2):
+    def motors(self,speed1,speed2,delay=10):
         """wrapper function that allows setting both motors at once.
         It just runs the self.motor() function once for each motor"""
-        self.motor(speed1,1)
-        self.motor(speed2,2)
+        self.motor(speed1,1,delay)
+        self.motor(speed2,2,delay)
 #here we are seeing which package is present. If one fails then try the other!
 #of course the errorcode is different between python versions too and we account
 #for that as well.
@@ -111,7 +116,7 @@ def motor_callback(velocity,motnum):
     mybot.motor(velocity,motnum)
 def stop_motors():
     """this function turns off both motors in case of robot escape"""
-    mybot.motors(0,0)
+    mybot.motors(0,0,1)
 #to define a subscriber we have to give it a _function_ object that takes one
 #input. Since our motor callback takes two inputs (you have to tell it which
 #motor you want to control), we will define a lambda function that takes

@@ -27,7 +27,7 @@ if sys.version_info[0] < 3:
 else:
     errorcode = ModuleNotFoundError
 
-#this is where you define what robot you are trying to control. 
+#this is where you define what robot you are trying to control.
 ################CHANGE THIS##################
 robotname="be107bot1"
 #we fill in our topic names with the appropriate robot name
@@ -49,17 +49,17 @@ mot2 = rospy.Publisher(topic_motor2,Int32,queue_size=10)
 
 # input is a color image, output should be a processed image where it is easy to extract the coordinates of the fly
 def imageProcessing(img):
-    """this function performs some image modification techniques 
+    """this function performs some image modification techniques
     such as background subtraction or pattern matching"""
     # insert your image processing algorithm here
     return img
 
 # input is the processed image, output is the motor commands
 def visionToMotors(img):
-    """this function is given a processed image, and outputs a 
-    directive for robot locomotion. m1 and m2 are Int32 data 
-    members where a value between -300 and 300 controls motor 
-    motion. 300 is full forward, -300 is full reverse. 
+    """this function is given a processed image, and outputs a
+    directive for robot locomotion. m1 and m2 are Int32 data
+    members where a value between -300 and 300 controls motor
+    motion. 300 is full forward, -300 is full reverse.
     Intermediate values result in slower motor rotation."""
     #here you will do something to convert the image into motion!
     #we specify max values. These are absolute values. Do with them
@@ -67,7 +67,7 @@ def visionToMotors(img):
     m1max = 300
     m2max = 300
     #m1 and m2 are ros messages and so have a funky format. First
-    #you define their type as Int32 and then set their data equal 
+    #you define their type as Int32 and then set their data equal
     #to the int itself. It's annoying I know, but it's the way it works.
     m1 = Int32()
     m2 = Int32()
@@ -81,8 +81,8 @@ def visionToMotors(img):
     return m1,m2
 # show image stream that is coming from a topic in OpenCv
 def callback(data):
-    """this is triggered each time data is recieved by the subscriber. 
-    It should process the image, show the image, and publish robot 
+    """this is triggered each time data is recieved by the subscriber.
+    It should process the image, show the image, and publish robot
     motor commands to the appropriate topics."""
     #these below functions decompress the image into a
     #numpy array suitable for opencv
@@ -92,23 +92,23 @@ def callback(data):
     proc_img = imageProcessing(img)
     #now we convert the processed image into motor motion
     m1,m2 = visionToMotors(proc_img)
-    #finally we publish the motor motion to the specified topics. 
+    #finally we publish the motor motion to the specified topics.
     #the names of these topics are indicated far above!
     #mot1.publish(m1)
     #mot2.publish(m2)
     #finally finally, we show the image! this should be a video.
     cv2.imshow('image',proc_img)
-    #it's kinda slow. I'm not sure why this is. Possibly the rate of image capture 
+    #it's kinda slow. I'm not sure why this is. Possibly the rate of image capture
     #in the robot half of the program? It isn't using a video codec so that could
     #also be it. It's sufficient for our purposes!!
     #this waitkey business rears it's ugly head once more.
     cv2.waitKey(2)
-    
+
 
 
 
 # initialize the node. This text is only for the purposes of 'your reference'.
-rospy.init_node('image_processing_node')
+rospy.init_node('image_processing_for_{}'.format(robotname))
 #here we are binding our callback function, above, to a topic by the name of 'topic_image'.
 #every time a message is published to that topic, callback will be called and the message
 #will be passed to it.
