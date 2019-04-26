@@ -108,11 +108,14 @@ hostname = socket.gethostname()
 topic_motor1 = "/{}/motor1".format(hostname)
 topic_motor2 = "/{}/motor2".format(hostname)
 
-def motor_callback(velocity,motnum):
+def motor_callback(movement_command,motnum):
     """here we are converting the input velocity and motnum into
     actual motor motion. Actually this is just an extremely basic
     wrapper for mybot.motor(). I guess we could just use that!
     Well this is just here for clarity"""
+    velocity = movement_command.data
+    #tstamp is when the motor command was sent.
+    tstamp = movement_command.header.stamp
     mybot.motor(velocity,motnum)
 def stop_motors():
     """this function turns off both motors in case of robot escape"""
@@ -125,9 +128,9 @@ def stop_motors():
 #talking about (motor1 or motor2). For an overview of lambda functions
 #read here: https://www.afternerd.com/blog/python-lambdas/
 motor1_sub = rospy.Subscriber(topic_motor1, Int32, \
-                            lambda a: motor_callback(int(a.data),1))
+                            lambda a: motor_callback(a,1))
 motor2_sub = rospy.Subscriber(topic_motor2, Int32, \
-                            lambda a: motor_callback(int(a.data),2))
+                            lambda a: motor_callback(a,2))
 
 # Init and Run
 rospy.init_node('rospigo_motor_control', anonymous=True)
