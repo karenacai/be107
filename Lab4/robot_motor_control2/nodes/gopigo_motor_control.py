@@ -115,7 +115,7 @@ def motor_callback(movement_command,motnum):
     Well this is just here for clarity"""
     velocity = movement_command.data
     #tstamp is when the motor command was sent.
-    tstamp = movement_command.header.stamp
+    #tstamp = movement_command.header.stamp
     mybot.motor(velocity,motnum)
 def stop_motors():
     """this function turns off both motors in case of robot escape"""
