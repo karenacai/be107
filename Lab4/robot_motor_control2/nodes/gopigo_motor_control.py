@@ -43,7 +43,7 @@ class Robot:
         #setting the motor maximum speeds:
         if(self.gpg==None):
             #the old robots move twice as fast!! scale it down
-            self.motorTimer = rospy.Timer(rospy.Duration(0.1), self.actuateMotorsOldRobot())
+            self.motorTimer = rospy.Timer(rospy.Duration(0.1), self.actuateMotorsOldRobot)
             self.speedscaling = 0.5
             #go.set_right_speed(maxmot1)
             #go.set_left_speed(maxmot2)
