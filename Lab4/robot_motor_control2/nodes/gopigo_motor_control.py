@@ -49,7 +49,7 @@ class Robot:
             #go.set_left_speed(maxmot2)
         else:
             self.gpg.set_speed(maxmot1)
-    def actuateMotorsOldRobot(self):
+    def actuateMotorsOldRobot(self,junk):
         """actually send messages to the motors. This is made to be less often
         because the old robot was freaking out upon recieving messages really fast"""
         go.motor1(self.mot1[0],self.mot1[1])
