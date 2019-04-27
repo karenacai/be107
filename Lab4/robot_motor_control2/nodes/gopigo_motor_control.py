@@ -104,6 +104,9 @@ class Robot:
 #here we are seeing which package is present. If one fails then try the other!
 #of course the errorcode is different between python versions too and we account
 #for that as well.
+
+# Init and Run
+rospy.init_node('rospigo_motor_control', anonymous=True)
 try:
     import gopigo as go
     mybot = Robot()
@@ -142,8 +145,7 @@ motor1_sub = rospy.Subscriber(topic_motor1, Int32, \
 motor2_sub = rospy.Subscriber(topic_motor2, Int32, \
                             lambda a: motor_callback(a,2))
 
-# Init and Run
-rospy.init_node('rospigo_motor_control', anonymous=True)
+
 #this next part says we run the stop_motors function when this code exits.
 #very useful to prevent run away robots!
 atexit.register(stop_motors)
