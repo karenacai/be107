@@ -52,9 +52,14 @@ def imageProcessing(img):
     """this function performs some image modification techniques
     such as background subtraction or pattern matching"""
     # insert your image processing algorithm here
-    cropped_img = image[image.shape[0]*2/5:image.shape[0]*3/5,0:image.shape[1]]
+    cropped_img = img[img.shape[0]*2/5:img.shape[0]*3/5,0:img.shape[1]]
+    img_gray = cv2.cvtColor(cropped_img, cv2.COLOR_BGR2GRAY)
+    ret, thresh = cv2.threshold(img_gray, 65, 255, cv2.THRESH_BINARY)
+    edges = cv2.Canny(thresh, 50, 150, apertureSize = 3)
 
-    return cropped_img
+
+    #edges = edges[int(img_len*3.0/4.0):img_len, 0:img_width]
+    return edges
 
 # input is the processed image, output is the motor commands
 def visionToMotors(img):
@@ -68,18 +73,53 @@ def visionToMotors(img):
     #what you wish!
     m1max = 300
     m2max = 300
+    imwidth = img.shape[1]
+    midpt = imwidth/2
     #m1 and m2 are ros messages and so have a funky format. First
     #you define their type as Int32 and then set their data equal
     #to the int itself. It's annoying I know, but it's the way it works.
+    rho = 1  # distance resolution in pixels of the Hough grid
+    theta = np.pi / 180  # angular resolution in radians of the Hough grid
+    threshold = 15  # minimum number of votes (intersections in Hough grid cell)
+    min_line_length = 50  # minimum number of pixels making up a line
+    max_line_gap = 20  # maximum gap in pixels between connectable line segments
+    line_image = np.copy(img) * 0  # creating a blank to draw lines on
+
+    # Run Hough on edge detected image
+    # Output "lines" is an array containing endpoints of detected line segments
+    lines = cv2.HoughLinesP(img, rho, theta, threshold, np.array([]),
+                        min_line_length, max_line_gap)
+    slopes = []
+    if(type(lines) == type(None)):
+        lines = []
+    linepos = []
+    if(len(lines)>0):
+        for line in lines:
+            for x1,y1,x2,y2 in line:
+                cv2.line(line_image,(x1,y1),(x2,y2),(255,0,0),5)
+                slopes += [[x2-x1,y2-y1]]
+                linepos += [[x2]]
+    if(lines == []):
+        avgpos = midpt
+    else:
+        avgpos = np.mean(linepos)
+    p = (midpt-avgpos)/imwidth
+    print("midpt is {}".format(midpt))
+    # Draw the lines on the  image
+    #lines_edges = cv2.addWeighted(img, 0.8, line_image, 1, 0)
+
+
 
     #avg_right = img[0:img.shape[0],0:image.shape[1]/2].mean(axis=1).mean(axis=0)
     #avg_left = img[0:img.shape[0],0:image.shape[1]/2].mean(axis=1).mean(axis=0)
     #lfrac = float(avg_left)/(avg_left+avg_right)
     m1 = Int32()
     m2 = Int32()
-    m1.data = 0
+    print("p = {}".format(p))
+    normalspeed = .2*m1max
+    m1.data = normalspeed+p*normalspeed/2
     #int(m1max*lfrac)
-    m2.data = 0
+    m2.data = normalspeed-p*normalspeed/2
     #int(m2max*(1.0-lfrac))
     #you may wish to output a further processed image here, or mangle the
     #input image. For example maybe you want to draw some lines or squares
@@ -98,12 +138,13 @@ def callback(data):
     img = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
     #next we process the image. Define this in imageProcessing, above!
     proc_img = imageProcessing(img)
+    #print(slopes,avgpos)
     #now we convert the processed image into motor motion
     m1,m2 = visionToMotors(proc_img)
     #finally we publish the motor motion to the specified topics.
     #the names of these topics are indicated far above!
-    #mot1.publish(m1)
-    #mot2.publish(m2)
+    mot1.publish(m1)
+    mot2.publish(m2)
     #finally finally, we show the image! this should be a video.
     cv2.imshow('image',proc_img)
     #it's kinda slow. I'm not sure why this is. Possibly the rate of image capture

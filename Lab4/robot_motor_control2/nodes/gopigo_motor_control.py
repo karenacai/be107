@@ -41,11 +41,19 @@ class Robot:
         #setting the motor maximum speeds:
         if(self.gpg==None):
             #the old robots move twice as fast!! scale it down
+            self.motorTimer = rospy.Timer(rospy.Duration(0.1), self.actuateMotorsOldRobot())
             self.speedscaling = 0.5
+            self.mot1 = (1,0)
+            self.mot2 = (1,0)
             #go.set_right_speed(maxmot1)
             #go.set_left_speed(maxmot2)
         else:
             self.gpg.set_speed(maxmot1)
+    def actuateMotorsOldRobot(self):
+        """actually send messages to the motors. This is made to be less often
+        because the old robot was freaking out upon recieving messages really fast"""
+        go.motor1(self.mot1[0],self.mot1[1])
+        go.motor2(self.mot1[0],self.mot1[1])
     def motor(self,speed,motnum,delay=50):
         """this takes care of setting the motor speed. Speed is a value from -255 to 255
         which gets scaled to whatever the maxmot values are. 255 or -255 is max in either
@@ -76,9 +84,11 @@ class Robot:
             #an absolute speed.
             #if(int(time.time()*1000)%delay==0):
             if(motnum==1):
-                go.motor1(direction,absspeed)
+                self.mot1 = (direction,absspeed)
+
             elif(motnum==2):
-                go.motor2(direction,absspeed)
+                self.mot2 = (direction,absspeed)
+
         else:
             #gopigo3 accepts positive and negative values
             if(motnum==1):
