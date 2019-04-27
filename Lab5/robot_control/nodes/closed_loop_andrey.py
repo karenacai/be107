@@ -117,9 +117,9 @@ def visionToMotors(img):
     m2 = Int32()
     print("p = {}".format(p))
     normalspeed = .2*m1max
-    m1.data = normalspeed+p*normalspeed/2
+    m1.data = normalspeed+p*normalspeed*2
     #int(m1max*lfrac)
-    m2.data = normalspeed-p*normalspeed/2
+    m2.data = normalspeed-p*normalspeed*2
     #int(m2max*(1.0-lfrac))
     #you may wish to output a further processed image here, or mangle the
     #input image. For example maybe you want to draw some lines or squares
