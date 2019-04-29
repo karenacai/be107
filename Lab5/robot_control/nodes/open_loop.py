@@ -52,20 +52,9 @@ rospy.init_node('control_{}'.format(robotname))
 #rospy.spin()
 rate = rospy.Rate(10)
 atexit.register(stop_motors)
+
+# insert your open-looped code here: should alternate between publishing motor commands and using the time.sleep() command
 while not rospy.is_shutdown():
-    mL = Int32()
-    mR = Int32()
-    print("hello")
-    mL.data = int(100)
-    mR.data = int(100)
-    mot1.publish(mL)
-    mot2.publish(mR)
-    time.sleep(5)
-    mL.data = int(0)
-    mR.data = int(100)
-    mot1.publish(mL)
-    mot2.publish(mR)
-    time.sleep(4)
     rate.sleep()
 
 
