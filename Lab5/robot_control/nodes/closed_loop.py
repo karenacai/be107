@@ -29,7 +29,7 @@ else:
 
 #this is where you define what robot you are trying to control.
 ################CHANGE THIS##################
-robotname="be107bot8"
+robotname="be107bot2"
 #we fill in our topic names with the appropriate robot name
 #MAKE SURE YOU FIXED IT, ABOVE.
 topic_motor1 = "/{}/motor1".format(robotname)
@@ -42,7 +42,7 @@ mot2 = rospy.Publisher(topic_motor2,Int32,queue_size=10)
 
 # output the properties (slope, etc.) of the line given an image
 def extractLine(img_gray):
-    return dst
+    return 0
 
 
 # input is the line properties extracted from the image, output is the motor commands
@@ -66,7 +66,7 @@ def callback(data):
     m1,m2 = visionToMotors(gray)
     mot1.publish(m1)
     mot2.publish(m2)
-    cv2.imshow('image',proc_image)
+    cv2.imshow('image',img)
     cv2.waitKey(2)
 
 rospy.init_node('CLcontrol_{}'.format(robotname))
