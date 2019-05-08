@@ -2,10 +2,11 @@
 import rospy 
 import sys
 import numpy as np
+import os
 from geometry_msgs.msg import PoseStamped
 from geometry_msgs.msg import Pose2D
 
-filename = '/home/be107/catkin_ws/src/get_vicon_data/nodes/dataFile.txt'
+filename = os.path.join( '.','dataFile.txt')
 f = open(filename, 'r+')
 f.truncate(0)
 

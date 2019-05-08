@@ -29,7 +29,7 @@ else:
 
 #this is where you define what robot you are trying to control.
 ################CHANGE THIS##################
-robotname="be107bot4"
+robotname="be107bot7"
 #we fill in our topic names with the appropriate robot name
 #MAKE SURE YOU FIXED IT, ABOVE.
 topic_motor1 = "/{}/motor1".format(robotname)
@@ -43,8 +43,8 @@ print(topic_image)
 #been read by the robot are held in reserve and sent later. You can decrease this and
 #the robot should respond to more immediate information, although in my testing
 #everything was pretty immediate with queue_size=10.
-mot1 = rospy.Publisher(topic_motor1,Int32,queue_size=10)
-mot2 = rospy.Publisher(topic_motor2,Int32,queue_size=10)
+mot1 = rospy.Publisher(topic_motor2,Int32,queue_size=10)
+mot2 = rospy.Publisher(topic_motor1,Int32,queue_size=10)
 
 
 # input is a color image, output should be a processed image where it is easy to extract the coordinates of the fly
@@ -116,7 +116,7 @@ def visionToMotors(img):
     m1 = Int32()
     m2 = Int32()
     print("p = {}".format(p))
-    normalspeed = .2*m1max
+    normalspeed = .4*m1max
     m1.data = normalspeed+p*normalspeed*2
     #int(m1max*lfrac)
     m2.data = normalspeed-p*normalspeed*2
