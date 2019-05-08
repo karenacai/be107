@@ -7,7 +7,7 @@ import math
 outfile = open("outfile.txt", "w+")
 print("Start")
 
-f = serial.Serial(port='/dev/ttyAMA0',
+f = serial.Serial(port='/dev/ttyS0',
                             baudrate=115200,
                             parity=serial.PARITY_NONE,
                             stopbits=serial.STOPBITS_ONE,
