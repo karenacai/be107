@@ -10,7 +10,7 @@ from sensor_msgs.msg import LaserScan
 hostname = socket.gethostname()
 rospy.init_node('laser_scan_publisher')
 scan_pub = rospy.Publisher('/{}/scan'.format(hostname), LaserScan, queue_size=50)
-num_readings = 100
+num_readings = 360
 laser_frequency = 40
 count = 0
 r = rospy.Rate(1.0)
@@ -73,7 +73,7 @@ while not rospy.is_shutdown():
         scan.angle_increment = 3.14*2 / num_readings
         scan.time_increment = (1.0 / laser_frequency) / (num_readings)
         scan.range_min = 0.0
-        scan.range_max = 100.0
+        scan.range_max = 700.0
         scan.ranges = [0]*num_readings
         scan.intensities = [0]*num_readings
     if byte != '':
@@ -83,6 +83,7 @@ while not rospy.is_shutdown():
             if started:
                 try:
                     speed, angle, dist_mm, quality = decode_string(string)
+                    print("angle is {}".format(angle))
                     index = int(angle*(2*3.14/360.0)/scan.angle_increment)
                     scan.ranges[index]=dist_mm
                     scan.intensities[index]=quality
