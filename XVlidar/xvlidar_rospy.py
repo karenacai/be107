@@ -86,7 +86,7 @@ while not rospy.is_shutdown():
                     speed, angle, dist_mm, quality = decode_string(string)
                     #print("angle is {}".format(angle))
                     index = int(angle*(2*3.14/360.0)/scan.angle_increment)
-                    scan.ranges[index]=dist_mm/100.0
+                    scan.ranges[index]=dist_mm
                     scan.intensities[index]=quality
                     count+=1
                     #print("didscan")
