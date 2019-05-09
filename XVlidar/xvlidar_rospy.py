@@ -74,6 +74,7 @@ while not rospy.is_shutdown():
         scan.time_increment = (1.0 / laser_frequency) / (num_readings)
         scan.range_min = 0.0
         scan.range_max = 700.0
+        scan.scan_time = .01
         scan.ranges = [0]*num_readings
         scan.intensities = [0]*num_readings
     if byte != '':
