@@ -53,8 +53,9 @@ def decode_string(string):
     if data[5] & 0x40:
          print "NOT GOOD"
 
-    #print "Speed: ", speed, ", angle: ", angle, ", dist: ",dist_mm, ", quality: ", quality
+    print "Speed: ", speed, ", angle: ", angle, ", dist: ",dist_mm, ", quality: ", quality
     #print "Checksum: ", checksum(data), ", from packet: ", in_checksum
+
     outfile.write(string+"\n")
     return speed,angle,dist_mm,quality
 
@@ -77,6 +78,7 @@ while not rospy.is_shutdown():
         scan.intensities = [0]*num_readings
     if byte != '':
         enc = (byte.encode('hex') + ":")
+        print(enc)
         if enc == "fa:":
             if started:
                 try:
@@ -87,7 +89,6 @@ while not rospy.is_shutdown():
                     count+=1
                 except Exception, e:
                     print e
-
             started = True
             string = "fa:"
         elif started:
