@@ -56,7 +56,7 @@ def decode_string(string):
     #print "Speed: ", speed, ", angle: ", angle, ", dist: ",dist_mm, ", quality: ", quality
     #print "Checksum: ", checksum(data), ", from packet: ", in_checksum
     outfile.write(string+"\n")
-    return speed,angle,dist_mm,quality)
+    return speed,angle,dist_mm,quality
 
 byte = f.read(1)
 started = False
