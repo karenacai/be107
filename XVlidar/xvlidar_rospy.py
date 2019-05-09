@@ -87,6 +87,7 @@ while not rospy.is_shutdown():
                     scan.ranges[index]=dist_mm
                     scan.intensities[index]=quality
                     count+=1
+                    print("didscan")
                 except Exception, e:
                     print e
             started = True
@@ -99,6 +100,6 @@ while not rospy.is_shutdown():
         scan_pub.publish(scan)
         count = 0
     byte = f.read(1)
-    r.sleep()
+    #r.sleep()
 outfile.close()
 print("End")
