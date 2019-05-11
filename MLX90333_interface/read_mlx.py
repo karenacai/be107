@@ -11,10 +11,11 @@ class mlxSensor:
         rdata = self.spicom.xfer([255,255,255,255,255,255,255,255],self.rate,self.delay,self.bits)
         alpha = int((rdata[1]<<8)+rdata[2])
         beta = int((rdata[3]<<8)+rdata[4])
-        return [alpha,beta]
+        return alpha,beta
     def __del__(self):
         self.spicom.close()
 if(__name__=="__main__"):
     mymlx = mlxSensor()
     while(True):
-        print("alpha {} beta {}".format(mymlx.getData()))
+        alpha,beta = mymlx.getData()
+        print("alpha {} beta {}".format([alpha,beta]))
