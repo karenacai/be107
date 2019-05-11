@@ -18,4 +18,4 @@ if(__name__=="__main__"):
     mymlx = mlxSensor()
     while(True):
         alpha,beta = mymlx.getData()
-        print("alpha {} beta {}".format([alpha,beta]))
+        print("alpha {} beta {}".format(alpha,beta))
