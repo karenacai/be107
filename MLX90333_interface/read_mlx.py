@@ -9,9 +9,10 @@ class mlxSensor:
 
     def getData(self):
         rdata = self.spicom.xfer([255,255,255,255,255,255,255,255],self.rate,self.delay,self.bits)
-        alpha = int((rdata[1]<<8)+rdata[2])
-        beta = int((rdata[3]<<8)+rdata[4])
-        return alpha,beta
+        alpha = int((rdata[2]<<8)+rdata[1])
+        beta = int((rdata[4]<<8)+rdata[3])
+        third = int((rdata[6]<<8)+rdata[5])
+        return alpha,beta,third
     def getRawData(self):
         rdata = self.spicom.xfer([255,255,255,255,255,255,255,255],self.rate,self.delay,self.bits)
         return rdata
@@ -20,10 +21,10 @@ class mlxSensor:
 if(__name__=="__main__"):
     mymlx = mlxSensor()
     while(True):
-        #alpha,beta = mymlx.getData()
+        alpha,beta,third = mymlx.getData()
+        print("alpha {} beta {} third {}".format(alpha,beta,third))
+        #rawdata = mymlx.getRawData()
+        #alpha = int((rawdata[2]<<8)+rawdata[1])
+        #beta = int((rawdata[4]<<8)+rawdata[3])
         #print("alpha {} beta {}".format(alpha,beta))
-        rawdata = mymlx.getRawData()
-        alpha = int((rawdata[2]<<8)+rawdata[1])
-        beta = int((rawdata[4]<<8)+rawdata[3])
-        print("alpha {} beta {}".format(alpha,beta))
-        print("alpha {},{} beta {},{}".format(rawdata[1],rawdata[2],rawdata[3],rawdata[4]))
+        #print("alpha {},{} beta {},{}".format(rawdata[1],rawdata[2],rawdata[3],rawdata[4]))
