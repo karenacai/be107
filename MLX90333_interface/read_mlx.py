@@ -12,7 +12,9 @@ class mlxSensor:
         alpha = int((bin(rdata[1])<<8)+bin(rdata[2]))
         beta = int((bin(rdata[3])<<8)+bin(rdata[4]))
         return alpha,beta
+    def __del__(self):
+        self.spicom.close()
 if(__name__=="__main__"):
     mymlx = mlxSensor()
     while(True):
-        print("alpha {} beta {}".format(mymlx.getData))
+        print("alpha {} beta {}".format(mymlx.getData()))
