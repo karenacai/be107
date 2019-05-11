@@ -9,8 +9,8 @@ class mlxSensor:
 
     def getData(self):
         rdata = self.spicom.xfer([255,255,255,255,255,255,255,255],self.rate,self.delay,self.bits)
-        alpha = int((bin(rdata[1])<<8)+bin(rdata[2]))
-        beta = int((bin(rdata[3])<<8)+bin(rdata[4]))
+        alpha = int((rdata[1]<<8)+rdata[2])
+        beta = int((rdata[3]<<8)+rdata[4])
         return alpha,beta
     def __del__(self):
         self.spicom.close()
